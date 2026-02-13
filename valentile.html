@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffe6ef;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
+      width: 320px;
+      position: relative;
+      z-index: 2;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 15px rgba(255, 77, 109, 0.4); }
+      to   { box-shadow: 0 0 30px rgba(255, 77, 109, 0.9); }
+    }
+
+    h1 { font-size: 22px; }
+
+    button {
+      padding: 12px 28px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    #yesBtn { background: #ff4d6d; color: white; }
+    #noBtn { background: #ddd; position: absolute; }
+
+    .yay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: pop 0.6s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Hearts */
+    .heart {
+      position: fixed;
+      top: -10px;
+      font-size: 20px;
+      animation: fall linear forwards;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Cute bears cuddle animation */
+    .bears {
+      font-size: 50px;
+      margin-top: 15px;
+      animation: cuddle 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes cuddle {
+      from { transform: scale(1) translateX(0); }
+      to   { transform: scale(1.1) translateX(5px); }
+    }
+  </style>
+</head>
+
+<body>
+
+<audio id="romanticMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card" id="question">
+  <h1><span id="typedName"></span>,<br>will you be my Valentine? 💖</h1>
+  <button id="yesBtn">YES</button>
+  <button id="noBtn">NO</button>
+</div>
+
+<div class="card yay" id="yayScreen">
+  <h1>💖 YAY!!! 💖</h1>
+  <p>Best decision ever 😘</p>
+  <p style="font-size:22px;">I love you ❤️</p>
+  <div class="bears">🐻‍❄️❤️🐻</div>
+  <p style="font-size:14px; margin-top:5px;">Two cute bears, forever together 🧸💞</p>
+</div>
+
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const question = document.getElementById("question");
+  const yayScreen = document.getElementById("yayScreen");
+  const music = document.getElementById("romanticMusic");
+
+  // Typing effect for name
+  const name = "Ballu the Bear";
+  let i = 0;
+  function typeName() {
+    if (i < name.length) {
+      document.getElementById("typedName").innerHTML += name.charAt(i);
+      i++;
+      setTimeout(typeName, 150);
+    }
+  }
+  typeName();
+
+  function moveButton() {
+    const card = document.getElementById("question");
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const maxX = cardRect.width - btnRect.width - 20;
+    const maxY = cardRect.height - btnRect.height - 20;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
+
+  noBtn.addEventListener("mouseover", moveButton);
+  noBtn.addEventListener("touchstart", function(e) {
+    e.preventDefault();
+    moveButton();
+  });
+
+  yesBtn.addEventListener("click", () => {
+    question.style.display = "none";
+    yayScreen.style.display = "flex";
+    music.play();
+    startHearts();
+  });
+
+  function startHearts() {
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+      heart.style.fontSize = (16 + Math.random() * 24) + "px";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }, 150);
+  }
+</script>
+
+</body>
+</html>
